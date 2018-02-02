@@ -1,0 +1,12 @@
+{
+    "good_name_id":"GOOD_NAME",
+    "good_pic":"GOOD_PIC_ID",
+    "store_name_id":"STORE_NAME",
+    "good_price_id":"GOOD_PRICE",
+    "goog_price_unit_id":"GOOD_PRICE_UNIT",
+    "postage_price_id":"POSTAGE_PRICE",
+    "postage_price_unit_id":"POSTAGE_PRICE_UNIT",
+    "sales_platform_id":"SALES_PLATFORM",
+    "search_keywords_id":"SEARCH_KEYWORDS",
+    "invalied_id":"INVALIED"
+}

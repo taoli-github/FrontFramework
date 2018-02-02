@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>接口测试</title>
+    <script src="tools/jquery-3.3.1.min.js"></script>
+
+    <script type="text/javascript">
+        "use strict";
+
+        $(function(){
+            
+        });
+// 商品操作
+        function operateGood(op_type)
+        {
+            var r_url = "http://172.96.236.245:5000/api/good";
+
+            var r_data = [];
+            r_data.push("?METHOD=" + op_type);
+            r_data.push("&ID=165e0790-8a24-4318-a62b-f8cbbf8c7f88");
+            r_data.push("&GOOD_PIC_ID=default_good_pic");
+            r_data.push("&STORE_NAME=店铺");
+            r_data.push("&GOOD_PRICE=100");
+            r_data.push("&GOOD_PRICE_UNIT=rmb");
+            r_data.push("&POSTAGE_PRICE=0");
+            r_data.push("&POSTAGE_PRICE_UNIT=rmb");
+            r_data.push("&SALES_PLATFORM=TAOBAO");
+            r_data.push("&SEARCH_KEYWORDS=TUOBA");
+            r_data.push("&INVALIED=0");
+            r_data.push("&GOOD_NAME=computer");
+            
+            $.ajax({
+                url: r_url+r_data.join(""),
+                type:"POST",
+                async:false,
+                success:function(data,textStatus,jqXhr){
+                    console.log(jqXhr);
+                    $("#log").text("状态:" + textStatus + "\r\n返回信息:" + data + "\r\n");
+                },
+                error:function(err){
+                    $("#log").text(err);
+                }
+            });
+        }
+// good list
+        function getList(){
+            let v_url = "http://172.96.236.245:5000/api/goodlist";
+            $.ajax({
+                url: v_url,
+                type:"GET",
+                async:false,
+                success:function(data,textStatus,jqXhr){
+                    console.log(jqXhr);
+                    $("#log").text("状态:" + textStatus + "\r\n返回信息:" + data + "\r\n");
+                },
+                error:function(err){
+                    $("#log").text(err);
+                }
+            });
+        }
+
+        function getGoodById()
+        {
+            let v_url = "http://172.96.236.245:5000/api/good";
+            $.ajax({
+                url: v_url + "?ID=54856e6e-68bc-42a2-8e2b-faaff99efa46",
+                type:"GET",
+                async:false,
+                success:function(data,textStatus,jqXhr){
+                    console.log(jqXhr);
+                    $("#log").text("状态:" + textStatus + "\r\n返回信息:" + data + "\r\n");
+                },
+                error:function(err){
+                    $("#log").text(err);
+                }
+            });
+
+        }
+// key-value
+        function Dict()
+        {
+            this.data = new Array();
+
+            this.push = function (key, value) {
+                this.data[key] = value;
+            };
+
+            this.get = function (key) {
+                return this.data[key];
+            };
+
+            this.remove = function (key) {
+                this.data[key] = null;
+            };
+
+            this.isEmpty = function () {
+                return this.data.length == 0;
+            };
+
+            this.size = function () {
+                return this.data.length;
+            };
+            
+            this.toString = function(){
+                array.forEach(element => {
+                    
+                });
+            };
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <input type="button" value="增加商品" onclick="operateGood('UPLOAD')">
+    </div>
+    <div>
+        <input type="button" value="更新商品" onclick="operateGood('MODIFY')">
+    </div>
+    <div>
+        <input type="button" value="获取商品" onclick="getGoodById()">
+    </div>
+    <div>
+        <input type="button" value="商品列表" onclick="getList()">
+    </div>
+    <div>
+        <textarea id="log" style="width:1000px;height:80px;"></textarea>
+    </div>
+
+</body>
+</html>
