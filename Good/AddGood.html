@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
+    <title>新建商品</title>
+    
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../font-awesome/css/font-awesome.min.css">
+
+    <!-- text fonts -->
+    <link rel="stylesheet" href="../css/ace-fonts.min.css">
+    <!-- ace style -->
+    <link rel="stylesheet" href="../css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style">
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="css/ace-part2.min.css" class="ace-main-stylesheet" />
+    <![endif]-->
+    <link rel="stylesheet" href="../css/ace-skins.min.css">
+    <link rel="stylesheet" href="../css/ace-rtl.min.css">
+    
+    <script src="../tools/jquery-3.3.1.min.js"></script>
+
+    <style type="text/css">
+        body{
+            background-color: white;
+        }
+        .label-right
+        {
+            text-align:right;
+            vertical-align: bottom;
+        }
+        .row-div
+        {
+            margin-bottom:10px;
+        }
+        .input-padding{
+            padding: 0 4px;
+        }
+        label{
+            margin-top:6px;
+        }
+        .test{
+            /* border:1px solid black; */
+            height: 34px;
+        }
+        .row
+        {
+            margin-bottom:15px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        "use strict";
+        $(function(){
+            //alert($);
+        });
+// 新增商品
+        function postGood()
+        {
+            var r_url = "http://172.96.236.245:5000/api/good";
+
+            var post_data = [];
+            post_data.push("?METHOD=UPLOAD");
+            post_data.push("&ID=");
+            post_data.push("&GOOD_PIC_ID=default_good_pic");
+            post_data.push("&STORE_NAME=" + $("#store-name").val());
+            post_data.push("&GOOD_PRICE=" + $("#good-price").val());
+            post_data.push("&GOOD_PRICE_UNIT=" + $("#good_price_unit").val());
+            post_data.push("&POSTAGE_PRICE=" + $("#post-price").val());
+            post_data.push("&POSTAGE_PRICE_UNIT=" + $("#post_price_unit").val());
+            post_data.push("&SALES_PLATFORM=" + $("#good-platform").val());
+            post_data.push("&SEARCH_KEYWORDS=" + $("#key-word").val());
+            post_data.push("&INVALIED=" + $("#flag-invalid").val());
+            post_data.push("&GOOD_NAME=" + $("#good-name").val());
+
+            $.ajax({
+                url: r_url+post_data.join(""),
+                type:"POST",
+                async:false,
+                success:function(data,textStatus,jqXhr){
+                    console.log(jqXhr);
+                    alert("新建商品成功");
+                    clearContent();
+                },
+                error:function(err){
+                    alert("新建商品失败,err:" + err);
+                }
+            });
+        }
+// 清空文本框
+        function clearContent(){
+            $(".input-padding").val("");
+            $("#flag-invalid").val("0");
+            $(".price-unit").val("RMB");
+        }
+    </script>
+</head>
+<body style="overflow-y:auto;">
+    <div>
+        <div class="row">
+            <div class="col-sm-12 test" style="text-align:center;">
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 test label-right">
+                <label>商品名称</label>
+            </div>
+            <div class="col-sm-3 test">
+                    <input id="good-name" type="text" class="input-padding" placeholder="商品名称" />
+            </div>
+            <div class="col-sm-1 test label-right">
+                <label>商铺名称</label>
+            </div>
+            <div class="col-sm-2 test text-input">
+                    <input id="store-name" type="text" class="input-padding" placeholder="商铺名称" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 test label-right">
+                <label>商品价格</label>
+            </div>
+            <div class="col-sm-3 test">
+                <input id="good-price" type="text" class="input-padding" placeholder="商品价格" />
+                <select name="" id="good_price_unit" class="price-unit">
+                    <option selected="selected" value="RMB">RMB</option>
+                    <option value="DOLLAR">DOLLAR</option>
+                </select>
+            </div>
+            <div class="col-sm-1 test label-right">
+                <label>邮费</label>
+            </div>
+            <div class="col-sm-3 test">
+                <input id="post-price" type="text" class="input-padding" placeholder="邮费" />
+                <select name="" id="post_price_unit" class="price-unit">
+                    <option selected="selected" value="RMB">RMB</option>
+                    <option value="DOLLAR">DOLLAR</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 test label-right">
+                <label>销售平台</label>
+            </div>
+            <div class="col-sm-3 test">
+                <input id="good-platform" type="text" class="input-padding" placeholder="销售平台" />
+            </div>
+            <div class="col-sm-1 test label-right">
+                <label>关键字</label>
+            </div>
+            <div class="col-sm-2 test">
+                <input id="key-word" type="text" class="input-padding" placeholder="关键字" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 test label-right">
+                <label>是否作废</label>
+            </div>
+            <div class="col-sm-3 test">
+                <select name="" id="flag-invalid">
+                    <option selected="selected" value="0">否</option>
+                    <option value="1">是</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 test label-right">
+                <button class="btn btn-info" type="button" id="sub-btn" onclick="postGood()">
+                    <i class="ace-icon fa fa-check bigger-110"></i>
+                    提交
+                </button>
+            </div>
+            <div class="col-sm-6 test">
+                <button class="btn" type="reset" onclick="clearContent()">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    重置
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
