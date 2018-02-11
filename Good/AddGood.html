@@ -48,22 +48,96 @@
         {
             margin-bottom:15px;
         }
+        #preview {
+            width: 300px;
+            height: 300px;
+            overflow: hidden;
+        }
+        #preview img {
+            width: 100%;
+            height: 100%;
+        }
+         .fileinput-button {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        .fileinput-button input{
+            position:absolute;
+            right: 0px;
+            top: 0px;
+            opacity: 0;
+            -ms-filter: 'alpha(opacity=0)';
+            font-size: 200px;
+        }
     </style>
 
     <script type="text/javascript">
         "use strict";
-        $(function(){
-            //alert($);
+        var server_ip = "";
+        $.getJSON('../webconfig.json', function (data) {
+            server_ip = eval(data).ip;
         });
+
+        $(function(){
+            $('[type=file]').change(function(e) {
+                var file = e.target.files[0]
+                preview(file)
+            });
+        });
+        // 预览图片
+        function preview(file) {
+            var img = new Image(), url = img.src = URL.createObjectURL(file)
+            var $img = $(img)
+            img.onload = function() {
+                URL.revokeObjectURL(url)
+                $('#preview').empty().append($img)
+            }
+        }
+        // 上传图片
+        var good_pic_id = "default_good_pic";
+        function uploadfile()
+        {
+            var objfile = document.getElementById("file-name").files[0];
+            if (typeof (objfile) == "undefined" || objfile.size <= 0) {
+                alert("please select one picture");
+                return;
+            }
+            var formfile = new FormData();
+            formfile.append("file", objfile);
+            
+            $.ajax({
+                url: "http://" + server_ip + ":5000/api/pic?METHOD=UPLOAD",
+                type: 'POST',
+                cache: false,
+                data: formfile,
+                processData: false,
+                contentType: false,
+                async:false,
+                success: function (result) {
+                   var res = eval("(" + result + ")");
+                   if(res.TYPE == "SUCCESS")
+                   {
+                       good_pic_id = res.ID;
+                       alert("上传成功");
+                   }
+                },
+                error: function(err)
+                {
+                    alert(err);
+                }
+            }); 
+        }
 // 新增商品
         function postGood()
         {
-            var r_url = "http://172.96.236.245:5000/api/good";
+            var r_url = "http://" + server_ip +":5000/api/good";
 
             var post_data = [];
             post_data.push("?METHOD=UPLOAD");
             post_data.push("&ID=");
-            post_data.push("&GOOD_PIC_ID=default_good_pic");
+            post_data.push("&GOOD_PIC_ID=" + good_pic_id);
             post_data.push("&STORE_NAME=" + $("#store-name").val());
             post_data.push("&GOOD_PRICE=" + $("#good-price").val());
             post_data.push("&GOOD_PRICE_UNIT=" + $("#good_price_unit").val());
@@ -79,7 +153,7 @@
                 type:"POST",
                 async:false,
                 success:function(data,textStatus,jqXhr){
-                    console.log(jqXhr);
+                    console.log(data);
                     alert("新建商品成功");
                     clearContent();
                 },
@@ -88,19 +162,32 @@
                 }
             });
         }
+        
 // 清空文本框
         function clearContent(){
             $(".input-padding").val("");
             $("#flag-invalid").val("0");
             $(".price-unit").val("RMB");
+
+            good_pic_id = "default_good_pic";
+            $('#preview').empty();
         }
     </script>
 </head>
 <body style="overflow-y:auto;">
     <div>
         <div class="row">
-            <div class="col-sm-12 test" style="text-align:center;">
-                
+            <div class="col-sm-12 test" style="height:100px;" align="center">
+                <div id="preview" style="width: 100px;height:100px;border:1px solid gray;"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 test" style="text-align:center">
+                <span class="btn btn-success fileinput-button">
+                    <SPAN>选择</SPAN>
+                    <input type="file" name="file" id="file-name">
+                </span>
+                <input type="button" class="btn" value="上传" onclick="uploadfile()">
             </div>
         </div>
         <div class="row">

@@ -9,15 +9,22 @@
 
     <script type="text/javascript">
         "use strict";
+        var server_ip = "";
+        $.getJSON('webconfig.json', function (data) {
+            server_ip = eval(data).ip;
+        });
 
+        $(function(){
+            
+        });
 // 商品操作
         function operateGood(op_type)
         {
-            var r_url = "http://172.96.236.245:5000/api/good";
+            var r_url = "http://"+server_ip+":5000/api/good";
 
             var r_data = [];
             r_data.push("?METHOD=" + op_type);
-            r_data.push("&ID=165e0790-8a24-4318-a62b-f8cbbf8c7f88");
+            r_data.push("&ID=67772332-94f6-4029-b9cd-4c5073264fe2");
             r_data.push("&GOOD_PIC_ID=default_good_pic");
             r_data.push("&STORE_NAME=店铺");
             r_data.push("&GOOD_PRICE=100");
@@ -44,7 +51,7 @@
         }
 // good list
         function getList(){
-            let v_url = "http://172.96.236.245:5000/api/goodlist";
+            let v_url = "http://"+server_ip+":5000/api/goodlist";
             $.ajax({
                 url: v_url,
                 type:"GET",
@@ -61,9 +68,9 @@
 
         function getGoodById()
         {
-            let v_url = "http://172.96.236.245:5000/api/good";
+            let v_url = "http://"+server_ip+":5000/api/good";
             $.ajax({
-                url: v_url + "?ID=54856e6e-68bc-42a2-8e2b-faaff99efa46",
+                url: v_url + "?ID=67772332-94f6-4029-b9cd-4c5073264fe2",
                 type:"GET",
                 async:false,
                 success:function(data,textStatus,jqXhr){
