@@ -24,7 +24,7 @@
 
             var r_data = [];
             r_data.push("?METHOD=" + op_type);
-            r_data.push("&ID=67772332-94f6-4029-b9cd-4c5073264fe2");
+            r_data.push("&ID=37a8b838-2d16-4e35-9413-5770b14af787");
             r_data.push("&GOOD_PIC_ID=default_good_pic");
             r_data.push("&STORE_NAME=店铺");
             r_data.push("&GOOD_PRICE=100");
@@ -70,7 +70,7 @@
         {
             let v_url = "http://"+server_ip+":5000/api/good";
             $.ajax({
-                url: v_url + "?ID=67772332-94f6-4029-b9cd-4c5073264fe2",
+                url: v_url + "?ID=37a8b838-2d16-4e35-9413-5770b14af787",
                 type:"GET",
                 async:false,
                 success:function(data,textStatus,jqXhr){
@@ -83,6 +83,7 @@
             });
 
         }
+       
 // key-value
         function Dict()
         {
@@ -133,5 +134,69 @@
         <textarea id="log" style="width:1000px;height:80px;"></textarea>
     </div>
 
+
+    <div>
+        <input type="button" value="新增任务" onclick="addtask()">
+    </div>
+    <div>
+        <input type="button" value="作废" onclick="deltask()">
+    </div>
+    <div>
+        <input type="button" value="获取任务" onclick="gettask()">
+    </div>
+
+    <script type="text/javascript">
+    var task_id = "05440e08-0e30-42d2-a892-576816b5b184";
+        function addtask(){
+            var task_name= "新增任务";
+            var good_list= '{"a2ac6611-2f98-4dd9-ac89-0afc3ea93885":{"GOOD_NUM":7,"GOOD_PRICE":100.0}}';
+            let v_url = "http://"+server_ip+":5000/api/task";
+            $.ajax({
+                url: v_url + "?METHOD=UPLOAD&TASK_NAME=" + task_name + "&GOOD_LIST=" + good_list,
+                type:"POST",
+                async:false,
+                success:function(data,textStatus,jqXhr){
+                    console.log(jqXhr);
+                    $("#log").text("状态:" + textStatus + "\r\n返回信息:" + data + "\r\n");
+                },
+                error:function(err){
+                    $("#log").text(err);
+                }
+            });
+        }
+        //67a09741-07a2-44ca-b081-d25b23e4e9e8
+        function gettask()
+        {
+            let v_url = "http://"+server_ip+":5000/api/task";
+            $.ajax({
+                url: v_url + "?ID="+task_id,
+                type:"get",
+                async:false,
+                success:function(data,textStatus,jqXhr){
+                    console.log(jqXhr);
+                    $("#log").text("状态:" + textStatus + "\r\n返回信息:" + data + "\r\n");
+                },
+                error:function(err){
+                    $("#log").text(err);
+                }
+            });
+        }
+         
+        function deltask(){
+            let v_url = "http://"+server_ip+":5000/api/task?METHOD=MODIFY";
+            $.ajax({
+                url: v_url + "&ID="+task_id,
+                type:"post",
+                async:false,
+                success:function(data,textStatus,jqXhr){
+                    console.log(jqXhr);
+                    $("#log").text("状态:" + textStatus + "\r\n返回信息:" + data + "\r\n");
+                },
+                error:function(err){
+                    $("#log").text(err);
+                }
+            });
+        }
+    </script>
 </body>
 </html>

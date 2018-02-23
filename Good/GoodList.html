@@ -5,8 +5,120 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
     <title>商品列表</title>
+    
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../font-awesome/css/font-awesome.min.css">
+
+    <!-- text fonts -->
+    <link rel="stylesheet" href="../css/ace-fonts.min.css">
+    <!-- ace style -->
+    <link rel="stylesheet" href="../css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style">
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="css/ace-part2.min.css" class="ace-main-stylesheet" />
+    <![endif]-->
+    <link rel="stylesheet" href="../css/ace-skins.min.css">
+    <link rel="stylesheet" href="../css/ace-rtl.min.css">
+    
+    <script src="../tools/jquery.min.js"></script>
+    <script src="../tools/bootstrap.min.js"></script>
+    <script src="../js/mini.js"></script>
+
+    <style type="text/css">
+        body{
+            background-color: white;
+        }
+        .div_modaldown
+        {
+            background-color: #8e9199;
+            display: none;
+            z-index: 10;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            filter: Alpha(Opacity=20);
+            -moz-opacity: 0.4;
+            opacity: 0.1;
+        }
+    </style>
+
+    <script type="text/javascript">
+
+        var server_ip = "";
+        $(function(){
+            server_ip = GetRequest("server_ip");
+            getGoodListId();
+        });
+var goodlistHtml = [];
+        // 获取goodlist {id}
+        function getGoodListId()
+        {
+            var v_url = "http://" + server_ip +":5000/api/goodlist";
+            $.ajax({
+                url: v_url,
+                type:"GET",
+                async:false,
+                success:function(data,textStatus,jqXhr){
+                    //console.log(data);
+                    showGoodList(eval(data));
+                },
+                error:function(err){
+                    alert(err);
+                }
+            });
+        }
+        // 展示商品列表
+        function showGoodList(arr_id)
+        {
+            arr_id.forEach(element => {
+                // alert(element.ID);
+                var good_data = getGoodInfo(element.ID,server_ip);
+                goodlistHtml.push('<div class="col-sm-3" ondblclick="editGood(this)" good_id='+element.ID+'>');
+                goodlistHtml.push('<div class="thumbnail" style="height:240px;width:200px;overflow-y:auto;">');
+                goodlistHtml.push('<img src="http://' + server_ip + ':5000/api/pic?ID=' + good_data.GOOD_PIC_ID +'" alt="..." class="img-responsive">');
+                goodlistHtml.push('<div class="caption">');
+                goodlistHtml.push('<h4>'+good_data.GOOD_NAME+'</h4>');
+                goodlistHtml.push('<p>价格: '+good_data.GOOD_PRICE+' &nbsp&nbsp 邮费: '+good_data.POSTAGE_PRICE+'</p>');
+                goodlistHtml.push('</DIV></div></div>');
+            });
+            $("#glist").html(goodlistHtml.join(""));
+        }
+
+        // 编辑商品
+        function editGood(obj) {
+            var good_id = $(obj).attr("good_id");
+            var DH = $(window).height();
+            $(".modal-body iframe").css({width:800, height:DH-160, src:""});
+            $(".modal-body iframe").attr("src","../Good/AddGood.html?temp="+Math.random()+"&server_ip="+ server_ip + "&good_id=" + good_id);
+            
+            $("#myModal").modal();
+        }
+    </script>
 </head>
-<body>
-   
+<body style="overflow-y:auto;">
+    <div class="row" id="glist">
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">商品修改</h4>
+                </div>
+                <div class="modal-body">
+                    <iframe src="" frameborder="0"></iframe>
+                </div>
+                <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> 
+                    <button type="button" class="btn btn-primary">Save changes</button> 
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <!-- 遮罩 -->
+    <div class="div_modaldown" oncontextmenu="return false;">
+    </div>
 </body>
 </html>

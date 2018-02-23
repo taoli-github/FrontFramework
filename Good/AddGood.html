@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="../css/ace-rtl.min.css">
     
     <script src="../tools/jquery-3.3.1.min.js"></script>
+    <script src="../js/mini.js"></script>
 
     <style type="text/css">
         body{
@@ -71,28 +72,67 @@
             -ms-filter: 'alpha(opacity=0)';
             font-size: 200px;
         }
+        .text-price{
+            width: 115px;
+        }
     </style>
 
     <script type="text/javascript">
         "use strict";
         var server_ip = "";
-        $.getJSON('../webconfig.json', function (data) {
-            server_ip = eval(data).ip;
-        });
+        var good_id = "";
 
         $(function(){
+            server_ip = GetRequest("server_ip");
+            good_id = GetRequest("good_id");
             $('[type=file]').change(function(e) {
-                var file = e.target.files[0]
-                preview(file)
+                var file = e.target.files[0];
+                preview(file);
             });
+            
+showGoodInfo();
         });
+        // good_id 为空，为新增good;否则为编辑good
+        function showGoodInfo()
+        {
+            
+            if(good_id == "" || good_id == undefined)
+            {
+                return;
+            }
+            var good_info = getGoodInfo(good_id, server_ip);
+
+            if(good_info != "")
+            {
+                fillGoodInfo(good_info);
+            }
+        }
+
+        // 填充good info
+        function fillGoodInfo(good_info)
+        {
+            $("#store-name").val(good_info.STORE_NAME);
+            $("#good-price").val(good_info.GOOD_PRICE);
+            $("#good_price_unit").val(good_info.GOOD_PRICE_UNIT);
+            $("#post-price").val(good_info.POSTAGE_PRICE);
+            $("#post_price_unit").val(good_info.POSTAGE_PRICE_UNIT);
+            $("#good-platform").val(good_info.SALES_PLATFORM);
+            $("#key-word").val(good_info.SEARCH_KEYWORDS);
+            $("#flag-invalid").val(good_info.INVALIED);
+            $("#good-name").val(good_info.GOOD_NAME);
+
+            good_pic_id = good_info.GOOD_PIC_ID;
+            $("#preview").append("<img src=http://" + server_ip + ":5000/api/pic?ID="+ good_pic_id +" />");
+        }
+        
         // 预览图片
         function preview(file) {
-            var img = new Image(), url = img.src = URL.createObjectURL(file)
-            var $img = $(img)
+            var img = new Image(), url = img.src = URL.createObjectURL(file);
+            var $img = $(img);
             img.onload = function() {
-                URL.revokeObjectURL(url)
-                $('#preview').empty().append($img)
+                URL.revokeObjectURL(url);
+                $('#preview').html("");
+                $('#preview').empty().append($img);
             }
         }
         // 上传图片
@@ -108,7 +148,7 @@
             formfile.append("file", objfile);
             
             $.ajax({
-                url: "http://" + server_ip + ":5000/api/pic?METHOD=UPLOAD",
+                url: "http://" + server_ip + ":5000/api/pic?r=" + Math.random() + "&METHOD=UPLOAD",
                 type: 'POST',
                 cache: false,
                 data: formfile,
@@ -133,10 +173,16 @@
         function postGood()
         {
             var r_url = "http://" + server_ip +":5000/api/good";
+            var method = "MODIFY";
+            if(good_id == "" || good_id == undefined)
+            {
+                good_id = "";
+                method = "UPLOAD";
+            }
 
             var post_data = [];
-            post_data.push("?METHOD=UPLOAD");
-            post_data.push("&ID=");
+            post_data.push("?r=" + Math.random() + "&METHOD=" + method);
+            post_data.push("&ID=" + good_id);
             post_data.push("&GOOD_PIC_ID=" + good_pic_id);
             post_data.push("&STORE_NAME=" + $("#store-name").val());
             post_data.push("&GOOD_PRICE=" + $("#good-price").val());
@@ -156,6 +202,7 @@
                     console.log(data);
                     alert("新建商品成功");
                     clearContent();
+                    good_id = "";
                 },
                 error:function(err){
                     alert("新建商品失败,err:" + err);
@@ -192,13 +239,13 @@
         </div>
         <div class="row">
             <div class="col-sm-3 test label-right">
-                <label>商品名称</label>
+                <label>商品名</label>
             </div>
             <div class="col-sm-3 test">
                     <input id="good-name" type="text" class="input-padding" placeholder="商品名称" />
             </div>
             <div class="col-sm-1 test label-right">
-                <label>商铺名称</label>
+                <label>商铺名</label>
             </div>
             <div class="col-sm-2 test text-input">
                     <input id="store-name" type="text" class="input-padding" placeholder="商铺名称" />
@@ -209,20 +256,20 @@
                 <label>商品价格</label>
             </div>
             <div class="col-sm-3 test">
-                <input id="good-price" type="text" class="input-padding" placeholder="商品价格" />
+                <input id="good-price" type="text" class="input-padding text-price" placeholder="商品价格" />
                 <select name="" id="good_price_unit" class="price-unit">
-                    <option selected="selected" value="RMB">RMB</option>
-                    <option value="DOLLAR">DOLLAR</option>
+                    <option selected="selected" value="RMB">¥</option>
+                    <option value="DOLLAR">$</option>
                 </select>
             </div>
             <div class="col-sm-1 test label-right">
                 <label>邮费</label>
             </div>
             <div class="col-sm-3 test">
-                <input id="post-price" type="text" class="input-padding" placeholder="邮费" />
+                <input id="post-price" type="text" class="input-padding text-price" placeholder="邮费" />
                 <select name="" id="post_price_unit" class="price-unit">
-                    <option selected="selected" value="RMB">RMB</option>
-                    <option value="DOLLAR">DOLLAR</option>
+                    <option selected="selected" value="RMB">¥</option>
+                    <option value="DOLLAR">$</option>
                 </select>
             </div>
         </div>

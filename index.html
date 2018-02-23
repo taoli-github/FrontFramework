@@ -190,16 +190,21 @@
     <script src="js/bootstrap-tab.js"></script>
 
     <script type="text/javascript">
+    var server_ip = "";
+        $.getJSON('webconfig.json?r=' + Math.random(), function (data) {
+            server_ip = eval(data).ip;
+        });
        $(function () {
            var hei = changeFrameHeight();
             $("#Index").height(hei[0]);
 
             $("#sidebar>ul>li>ul>li").click(function () {
                 
-                var option = { "id": this.id, "url": $(this).attr("url"), "title": this.title, "close": true,"height":hei[0],"parHeight":hei[1] };
+                var option = { "id": this.id, "url": $(this).attr("url") + "?temp= " + Math.random() + "&server_ip=" + server_ip, "title": this.title, "close": true,"height":hei[0],"parHeight":hei[1] };
 
                 addTabs(option);
             });
+
             
         });
         

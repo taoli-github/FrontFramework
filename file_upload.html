@@ -55,11 +55,11 @@
         }
         $(function() {
             $('[type=file]').change(function(e) {
-                var file = e.target.files[0]
-                preview1(file)
+                var file = e.target.files[0];
+                preview1(file);
+                //uploadfile();
             });
 
-           
         });
         function uploadfile()
         {
@@ -82,7 +82,7 @@
                 contentType: false,
                 async:false,
                 success: function (result) {
-                    alert(result);
+                    alert("hello");
                 },
             }); 
         }
