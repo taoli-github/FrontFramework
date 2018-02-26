@@ -191,8 +191,10 @@
 
     <script type="text/javascript">
     var server_ip = "";
+    var ip_port = "5000";
         $.getJSON('webconfig.json?r=' + Math.random(), function (data) {
             server_ip = eval(data).ip;
+            ip_port = eval(data).port; 
         });
        $(function () {
            var hei = changeFrameHeight();
@@ -200,7 +202,7 @@
 
             $("#sidebar>ul>li>ul>li").click(function () {
                 
-                var option = { "id": this.id, "url": $(this).attr("url") + "?temp= " + Math.random() + "&server_ip=" + server_ip, "title": this.title, "close": true,"height":hei[0],"parHeight":hei[1] };
+                var option = { "id": this.id, "url": $(this).attr("url") + "?temp= " + Math.random() + "&server_ip=" + server_ip + "&ip_port=" + ip_port, "title": this.title, "close": true,"height":hei[0],"parHeight":hei[1] };
 
                 addTabs(option);
             });

@@ -1,8 +1,11 @@
 1. 商品编辑 主要是图片如何展示 √
-2. 新增任务页面
-3. 任务列表
+2. 新增任务页面 √
+3. 任务列表 
 4. 任务列表 悬停可以查看任务详细内容
-   商品列表图片展示逻辑优化
-   ajax请求等待时 转圈gif
+   商品列表图片展示逻辑优化 (懒加载)
+   ajax请求等待时 转圈gif 
+   数字输入验证
 5. 图片选择后直接上传，不要在点击【上传】
 6. ajax 请求 判断 http code 是否为200； 封装ajax方法
+
+{"INFO": "DELETE SUCCESS", "QRCODE_PIC_ID": "9f957aef-30d0-4c3d-bc5f-6cfcee885c19", "TASK_NAME": "新增任务", "GOOD_LIST": "{\"e5459e73-034c-4f33-905a-169816a36bc1\": {\"GOOD_NUM\": 7, \"GOOD_PRICE\": 213.0}, \"a2ac6611-2f98-4dd9-ac89-0afc3ea93885\": {\"GOOD_NUM\": 7, \"GOOD_PRICE\": 100.0}}", "GOOD_SUM_NUM": 14, "GOOD_SUM_PRICE": 2191.0, "TYPE": "SUCCESS", "ID": "eeeaa994-9f43-4fbb-82d7-1affc1954f2b"}

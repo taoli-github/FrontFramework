@@ -20,7 +20,7 @@
 // 商品操作
         function operateGood(op_type)
         {
-            var r_url = "http://"+server_ip+":5000/api/good";
+            var r_url = "http://"+server_ip+":500/api/good";
 
             var r_data = [];
             r_data.push("?METHOD=" + op_type);
@@ -144,12 +144,15 @@
     <div>
         <input type="button" value="获取任务" onclick="gettask()">
     </div>
+    <div>
+        <input type="button" value="jsonkey" onclick="jsonKey()">
+    </div>
 
     <script type="text/javascript">
-    var task_id = "05440e08-0e30-42d2-a892-576816b5b184";
+    var task_id = "eeeaa994-9f43-4fbb-82d7-1affc1954f2b"; // "05440e08-0e30-42d2-a892-576816b5b184";
         function addtask(){
             var task_name= "新增任务";
-            var good_list= '{"a2ac6611-2f98-4dd9-ac89-0afc3ea93885":{"GOOD_NUM":7,"GOOD_PRICE":100.0}}';
+            var good_list= '{"a2ac6611-2f98-4dd9-ac89-0afc3ea93885":{"GOOD_NUM":7,"GOOD_PRICE":100.0},"e5459e73-034c-4f33-905a-169816a36bc1":{"GOOD_NUM":7,"GOOD_PRICE":100.0}}';
             let v_url = "http://"+server_ip+":5000/api/task";
             $.ajax({
                 url: v_url + "?METHOD=UPLOAD&TASK_NAME=" + task_name + "&GOOD_LIST=" + good_list,
@@ -196,6 +199,17 @@
                     $("#log").text(err);
                 }
             });
+        }
+        function jsonKey()
+        {
+            var jsonStr = '{"a2ac6611-2f98-4dd9-ac89-0afc3ea93885":{"GOOD_NUM":7,"GOOD_PRICE":100.0},"e5459e73-034c-4f33-905a-169816a36bc1":{"GOOD_NUM":7,"GOOD_PRICE":100.0}}';
+            var jsonArr = eval("(" + jsonStr + ")");
+
+            for(var jsonU in jsonArr)
+            {
+                alert(jsonU + jsonArr[jsonU]);
+                eval(jsonArr[jsonU]);
+            }
         }
     </script>
 </body>

@@ -13,10 +13,10 @@ function GetRequest(key) {
 }
 
 // 获取good info
-function getGoodInfo(id,server_adress)
+function getGoodInfo(id,server_adress,ip_port)
 {
     var re_data = "";
-    var v_url = "http://" + server_adress + ":5000/api/good";
+    var v_url = "http://" + server_adress + ":"+ip_port+"/api/good";
     $.ajax({
         url: v_url + "?ID=" + id,
         type:"GET",
@@ -31,4 +31,24 @@ function getGoodInfo(id,server_adress)
     });
 
     return re_data;
+}
+
+// 获取goodlist {id}
+function getGoodListId(server_ip,ip_port)
+{
+    var good_list = "";
+    var v_url = "http://" + server_ip +":"+ip_port+"/api/goodlist";
+    $.ajax({
+        url: v_url,
+        type:"GET",
+        async:false,
+        success:function(data,textStatus,jqXhr){
+            //console.log(data);
+            good_list = eval(data);
+        },
+        error:function(err){
+            alert(err);
+        }
+    });
+    return good_list;
 }
