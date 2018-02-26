@@ -145,6 +145,9 @@
         <input type="button" value="获取任务" onclick="gettask()">
     </div>
     <div>
+        <input type="button" value="任务列表" onclick="gettasklist()">
+    </div>
+    <div>
         <input type="button" value="jsonkey" onclick="jsonKey()">
     </div>
 
@@ -190,6 +193,22 @@
             $.ajax({
                 url: v_url + "&ID="+task_id,
                 type:"post",
+                async:false,
+                success:function(data,textStatus,jqXhr){
+                    console.log(jqXhr);
+                    $("#log").text("状态:" + textStatus + "\r\n返回信息:" + data + "\r\n");
+                },
+                error:function(err){
+                    $("#log").text(err);
+                }
+            });
+        }
+        function gettasklist()
+        {
+            let v_url = "http://"+server_ip+":5000/api/tasklist";
+            $.ajax({
+                url: v_url,
+                type:"get",
                 async:false,
                 success:function(data,textStatus,jqXhr){
                     console.log(jqXhr);

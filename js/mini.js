@@ -52,3 +52,42 @@ function getGoodListId(server_ip,ip_port)
     });
     return good_list;
 }
+// task list
+function getTaskList(server_ip,ip_port)
+{
+    var task_list = "";
+    var v_url = "http://" + server_ip +":"+ip_port+"/api/tasklist";
+    $.ajax({
+        url: v_url,
+        type:"GET",
+        async:false,
+        success:function(data,textStatus,jqXhr){
+            //console.log(data);
+            task_list = eval(data);
+        },
+        error:function(err){
+            alert(err);
+        }
+    });
+    return task_list;
+}
+// task info
+function getTaskInfo(id,server_adress,ip_port)
+{
+    var re_data = "";
+    var v_url = "http://" + server_adress + ":"+ip_port+"/api/task";
+    $.ajax({
+        url: v_url + "?ID=" + id,
+        type:"GET",
+        async:false,
+        success:function(data,textStatus,jqXhr){
+            //console.log(data);
+            re_data = eval("(" + data + ")");
+        },
+        error:function(err){
+            alert(err);
+        }
+    });
+
+    return re_data;
+}
